@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rick_and_morty_app/ui/characters/view_model/characters_view_model.dart';
+import 'package:rick_and_morty_app/ui/characters/widgets/character_card_widget.dart';
 
 class CharactersScreen extends StatefulWidget {
   const CharactersScreen({super.key});
@@ -25,6 +26,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Personagens'),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -41,44 +43,40 @@ class _CharactersScreenState extends State<CharactersScreen> {
                           child: CircularProgressIndicator(),
                         );
                       }
-                      if (value is CharactersLoadedState) {
-                        return ListView.builder(
-                          itemCount: value.characters.length,
-                          itemBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Card(
-                              color: Colors.grey[800],
-                              child: ListTile(
-                                onTap: () => vm.selectCharacter(
-                                    context, value.characters[index]),
-                                trailing: const Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                ),
-                                title: Text(
-                                  value.characters[index].name,
-                                  style: TextStyle(
-                                    fontFamily: 'WubbaLubbaDubDub',
-                                    fontSize: 26,
-                                    color: Color(0xFF69C8EC),
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  value.characters[index].status,
-                                  style: TextStyle(
-                                    color: Color(0xFF97CE4C),
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                leading: CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: NetworkImage(
-                                    value.characters[index].image,
-                                  ),
-                                ),
-                              ),
-                            ),
+                      if (value is CharactersErrorState) {
+                        return Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text('Algo deu errado.'),
+                              const SizedBox(height: 8),
+                              FilledButton.icon(
+                                onPressed: vm.getCharacters,
+                                icon: const Icon(Icons.refresh),
+                                label: const Text('Tentar novamente'),
+                              )
+                            ],
                           ),
+                        );
+                      }
+                      if (value is CharactersLoadedState) {
+                        return GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                            childAspectRatio: .72,
+                          ),
+                          itemCount: value.characters.length,
+                          itemBuilder: (context, index) {
+                            final character = value.characters[index];
+                            final heroTag = 'img_${character.image}';
+                            return CharacterCardWidget(
+                              character: character,
+                              heroTag: heroTag,
+                            );
+                          },
                         );
                       }
                       return Container();

@@ -56,11 +56,13 @@ class CharactersViewModel extends ValueNotifier<CharactersState> {
     getCharacters();
   }
 
-  void selectCharacter(BuildContext context, Character character) {
+  void selectCharacter(
+      BuildContext context, Character character, String heroTag) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CharacterDetailScreen(character: character),
+        builder: (context) =>
+            CharacterDetailScreen(character: character, heroTag: heroTag),
       ),
     );
   }

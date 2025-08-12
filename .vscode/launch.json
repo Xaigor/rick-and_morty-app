@@ -1,0 +1,10 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "rick_and_morty_app",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
+}
