@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:rick_and_morty_app/data/repositories/characters_repository.dart';
 import 'package:rick_and_morty_app/data/services/api_client.dart';
 import 'package:rick_and_morty_app/data/services/app_service.dart';
-import 'package:rick_and_morty_app/ui/characters/widgets/characters_screen.dart';
+// import 'package:rick_and_morty_app/ui/characters/widgets/characters_screen.dart';
+import 'package:rick_and_morty_app/ui/splash/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<ApiClient>(
-          // Troque apenas AppService.defaultClient para alternar entre dio/http
           create: (_) => AppService.createApiClient(),
         ),
         ProxyProvider<ApiClient, CharactersRepository>(
@@ -35,34 +35,12 @@ class MyApp extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: 'Rick and Morty',
             theme: theme,
-            home: MyHomePage(),
+            home: const SplashScreen(),
           );
         },
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CharactersScreen(),
-              ),
-            );
-          },
-          child: Text("navegar"),
-        ),
       ),
     );
   }
