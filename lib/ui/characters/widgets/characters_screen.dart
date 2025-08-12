@@ -73,6 +73,9 @@ class _CharactersScreenState extends State<CharactersScreen> {
                             final character = value.characters[index];
                             final heroTag = 'img_${character.image}';
                             return CharacterCardWidget(
+                              onTap: (AnimationController controller) =>
+                                  vm.selectCharacter(
+                                      context, character, controller, heroTag),
                               character: character,
                               heroTag: heroTag,
                             );
@@ -99,7 +102,9 @@ class _CharactersScreenState extends State<CharactersScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             OutlinedButton(
-                              onPressed: vm.previousPage,
+                              onPressed: vm.previousPage != null
+                                  ? vm.changeToPreviousPage
+                                  : null,
                               child: const Icon(Icons.arrow_back_ios,
                                   color: Color(0xFF97CE4C)),
                             ),
@@ -112,7 +117,9 @@ class _CharactersScreenState extends State<CharactersScreen> {
                               ];
                             }()),
                             OutlinedButton(
-                              onPressed: vm.nextPage,
+                              onPressed: vm.nextPage != null
+                                  ? vm.changeToNextPage
+                                  : null,
                               child: const Icon(Icons.arrow_forward_ios,
                                   color: Color(0xFF97CE4C)),
                             ),
@@ -130,6 +137,7 @@ class _CharactersScreenState extends State<CharactersScreen> {
 
   styleButton(int selectedPage, int page) {
     bool selected = selectedPage == page;
+    if (page > vm.totalPages) return Container();
     return GestureDetector(
       onTap: () => vm.changePage(page),
       child: Container(

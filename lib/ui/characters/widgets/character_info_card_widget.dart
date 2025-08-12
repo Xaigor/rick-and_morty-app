@@ -13,18 +13,14 @@ class CharacterInfoCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10),
-      child: DecoratedBox(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Container(
         decoration: BoxDecoration(
+          color: Color(0xFF99F2C8),
           borderRadius: BorderRadius.circular(16),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF99F2C8), Color(0xFF1F4037)],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(10),
           child: Row(
             children: [
               Icon(icon, color: Colors.black87),
