@@ -1,10 +1,7 @@
-// Ajuste: Injeção via provider de ApiClient e CharactersRepository para uso com context.read().
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rick_and_morty_app/data/repositories/characters_repository.dart';
-import 'package:rick_and_morty_app/data/services/api_client.dart';
 import 'package:rick_and_morty_app/data/services/app_service.dart';
-// import 'package:rick_and_morty_app/ui/characters/widgets/characters_screen.dart';
 import 'package:rick_and_morty_app/ui/splash/splash_screen.dart';
 
 void main() {
@@ -25,12 +22,8 @@ class MyApp extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        Provider<ApiClient>(
-          create: (_) => AppService.createApiClient(),
-        ),
-        ProxyProvider<ApiClient, CharactersRepository>(
-          update: (_, apiClient, __) => CharactersRepository(apiClient),
-        ),
+        Provider(create: (context) => AppService.createApiClient()),
+        Provider(create: (context) => CharactersRepository(context.read())),
       ],
       child: Builder(
         builder: (context) {
