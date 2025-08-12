@@ -33,51 +33,89 @@ class CharactersViewModel extends ValueNotifier<CharactersState> {
   CharactersState get state => value;
   set state(CharactersState state) => value = state;
 
+  bool _isLoading = false;
   int _page = 1;
+  int _totalPages = 1;
+  String? _previousPage;
+  String? _nextPage;
   int get page => _page;
+  int get totalPages => _totalPages;
+  String? get previousPage => _previousPage;
+  String? get nextPage => _nextPage;
+
   set page(int page) {
     _page = page;
     notifyListeners();
   }
 
   Future<void> getCharacters() async {
+    if (_isLoading) return;
+    _isLoading = true;
     state = CharactersLoadingState();
 
     try {
-      final characters = await repository.getCharacters(page: _page);
+      final model = await repository.getCharacters(page: _page); // DTO
+      _totalPages = model.info.pages;
+      _previousPage = model.info.prev;
+      _nextPage = model.info.next;
+
+      final characters = model.results
+          .map((e) => Character(
+                name: e.name,
+                image: e.image,
+                status: e.status,
+                species: e.species,
+              ))
+          .toList();
+
       state = CharactersLoadedState(characters);
     } catch (e) {
       state = CharactersErrorState();
+    } finally {
+      _isLoading = false;
     }
   }
 
   void changePage(int page) {
-    _page = page;
+    _page = page.clamp(1, _totalPages);
     getCharacters();
   }
 
-  void selectCharacter(
-      BuildContext context, Character character, String heroTag) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            CharacterDetailScreen(character: character, heroTag: heroTag),
-      ),
-    );
-  }
-
-  void previousPage() {
+  void changeToPreviousPage() {
     if (_page > 1) {
       _page--;
       getCharacters();
     }
   }
 
-  void nextPage() {
-    if (_page < 42) {
+  void changeToNextPage() {
+    if (_page < _totalPages) {
       _page++;
       getCharacters();
     }
+  }
+
+  void selectCharacter(BuildContext context, Character character,
+      AnimationController controller, String heroTag) async {
+    await controller.reverse();
+    Navigator.of(context).push(_buildDetailRoute(character, heroTag));
+  }
+
+  PageRouteBuilder _buildDetailRoute(Character c, String heroTag) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 450),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          CharacterDetailScreen(character: c, heroTag: heroTag),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final offset = Tween<Offset>(
+                begin: const Offset(0, .06), end: Offset.zero)
+            .animate(
+                CurvedAnimation(curve: Curves.easeOutCubic, parent: animation));
+        final fade = CurvedAnimation(parent: animation, curve: Curves.easeIn);
+        return FadeTransition(
+            opacity: fade,
+            child: SlideTransition(position: offset, child: child));
+      },
+    );
   }
 }
