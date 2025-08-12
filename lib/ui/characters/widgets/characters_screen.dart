@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rick_and_morty_app/ui/characters/view_model/characters_viewmodel.dart';
+import 'package:rick_and_morty_app/ui/characters/view_model/characters_view_model.dart';
 
 class CharactersScreen extends StatefulWidget {
   const CharactersScreen({super.key});

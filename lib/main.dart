@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:rick_and_morty_app/data/repositories/characters_repository.dart';
 import 'package:rick_and_morty_app/data/services/api_client.dart';
 import 'package:rick_and_morty_app/data/services/app_service.dart';
-import 'package:rick_and_morty_app/ui/characters/widgets/characters_view.dart';
+import 'package:rick_and_morty_app/ui/characters/widgets/characters_screen.dart';
 
 void main() {
   runApp(const MyApp());

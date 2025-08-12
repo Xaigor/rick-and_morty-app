@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rick_and_morty_app/data/model/character_api_model.dart';
+import 'package:rick_and_morty_app/domain/models/character.dart';
 
 class CharacterDetailScreen extends StatelessWidget {
-  final ResultsCharacter character;
+  final Character character;
   const CharacterDetailScreen({super.key, required this.character});
 
   @override

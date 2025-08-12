@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:rick_and_morty_app/data/model/character_api_model.dart';
 import 'package:rick_and_morty_app/data/repositories/characters_repository.dart';
+import 'package:rick_and_morty_app/domain/models/character.dart';
 import 'package:rick_and_morty_app/ui/characters/widgets/character_detail_screen.dart';
 
 abstract class CharactersState {}
 
 class CharactersLoadedState extends CharactersState {
-  final List<ResultsCharacter> characters;
+  final List<Character> characters;
   CharactersLoadedState(this.characters);
 
   @override
@@ -56,7 +56,7 @@ class CharactersViewModel extends ValueNotifier<CharactersState> {
     getCharacters();
   }
 
-  void selectCharacter(BuildContext context, ResultsCharacter character) {
+  void selectCharacter(BuildContext context, Character character) {
     Navigator.push(
       context,
       MaterialPageRoute(
