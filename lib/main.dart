@@ -15,6 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF69C8EC), brightness: Brightness.dark),
+      useMaterial3: true,
+    );
+
     return MultiProvider(
       providers: [
         Provider<ApiClient>(
@@ -29,7 +36,7 @@ class MyApp extends StatelessWidget {
         builder: (context) {
           return MaterialApp(
             title: 'Rick and Morty',
-            theme: ThemeData(),
+            theme: theme,
             home: MyHomePage(),
           );
         },
